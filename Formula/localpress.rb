@@ -14,51 +14,48 @@
 class Localpress < Formula
   desc "Local-compute WordPress media optimization. Your laptop, your library."
   homepage "https://github.com/gfargo/localpress"
-  version "1.10.0"
+  version "1.10.1"
   license "MIT"
 
   on_macos do
     on_arm do
       url "https://github.com/gfargo/localpress/releases/download/v#{version}/localpress-darwin-arm64"
-      sha256 "f4021a530b008e2b3ad0b5407933314bf862919e4ea15d798677fd4ec51dc985"
+      sha256 "e7e06f981701f6e5eac360b734db118d1ae9afdc021135a5208911aa08694c43"
     end
     on_intel do
       url "https://github.com/gfargo/localpress/releases/download/v#{version}/localpress-darwin-x64"
-      sha256 "dbe23d600a5cf04613174565743ca08dc1332a1096d25a819de3ecda7409cfbe"
+      sha256 "cf56edbad6fe8297ca2b5a77794bfc521f1b4e84c29413a2137045b10b9d547a"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/gfargo/localpress/releases/download/v#{version}/localpress-linux-arm64"
-      sha256 "4c94285e1649f067b93e38cda2ad4c413a25a9c5c6c640852459250364eabb29"
+      sha256 "17d673d1ad87ea5c9b5f801e1921abad680ec57a78adf37106c88f17e88f1cd7"
     end
     on_intel do
       url "https://github.com/gfargo/localpress/releases/download/v#{version}/localpress-linux-x64"
-      sha256 "28e6bc53344fbbd87564ad535438bb393d3dcf59eba347e7d1ef73845e068a94"
+      sha256 "390dda1c6a9d18ec30a3669d255222d611fc44196f24a76ee9cf7ce3e606dbfd"
     end
   end
 
-  depends_on "vips"
-
   def install
     bin.install Dir["localpress*"].first => "localpress"
-
-    # Install sharp globally so the compiled binary can find it at runtime.
-    # sharp is a native module that can't be bundled into single-file binaries.
-    system "npm", "install", "-g", "sharp"
   end
 
   def caveats
     <<~EOS
-      localpress requires sharp for image processing.
-      It was installed globally via npm during formula installation.
+      localpress uses sharp (libvips) for image processing.
 
-      If you encounter issues, reinstall with:
+      On first use of optimize/convert/resize/remove-bg, localpress will
+      check if sharp is installed globally and offer to install it for you.
+
+      You can also install it manually at any time:
+        bun install -g sharp
+        # or:
         npm install -g sharp
 
-      Verify with:
-        localpress doctor
+      Run `localpress doctor` to verify your setup.
     EOS
   end
 
